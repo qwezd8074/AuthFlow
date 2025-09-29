@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Main Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f8f9fa;
+      color: #333;
+    }
+    header {
+      background: #007bff;
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { margin: 0; font-size: 20px; }
+    nav a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    nav a:hover { text-decoration: underline; }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .btn:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>AuthFlow Demo</h1>
+  <nav>
+    <a th:href="@{/join}">Sign Up</a>
+    <a th:href="@{/login}">Login</a>
+  </nav>
+</header>
+
+
+<div class="container">
+  <h2>Welcome to AuthFlow!</h2>
+  <p>This is a simple main page after login/signup.</p>
+
+  <a href="#" class="btn">My Page</a>
+  <a href="#" class="btn">Settings</a>
+  <a href="#" class="btn">Log Out</a>
+</div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var msg = /*[[${msg}]]*/ null;  // FlashAttribute 값
+  if (msg) {
+      alert(msg);
+  }
+
+  // 만약 쿼리스트링(param)으로 넘길 경우:
+  var paramMsg = /*[[${param.msg}]]*/ null;
+  if (paramMsg) {
+      alert(paramMsg);
+  }
+  /*]]>*/
+</script>
+
+</body>
+</html>

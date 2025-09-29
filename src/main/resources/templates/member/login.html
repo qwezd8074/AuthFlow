@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{
+      font-family: Arial, sans-serif; background:#f8f9fa;
+      display:flex; align-items:center; justify-content:center; height:100vh; margin:0;
+    }
+    .login-container{
+      background:#fff; width:320px; padding:30px; border-radius:12px;
+      box-shadow:0 4px 10px rgba(0,0,0,.1);
+    }
+    h2{ margin:0 0 20px; text-align:center; color:#333; }
+    label{ display:block; margin-bottom:6px; font-weight:bold; font-size:14px; }
+    input{
+      width:100%; padding:10px; margin-bottom:16px;
+      border:1px solid #ccc; border-radius:6px; font-size:14px;
+    }
+    button{
+      width:100%; padding:10px; background:#007bff; border:none; border-radius:6px;
+      color:#fff; font-size:15px; cursor:pointer;
+    }
+    button:hover{ background:#0056b3; }
+    .sub{
+      margin-top:12px; font-size:13px; text-align:center; color:#666;
+    }
+    .sub a{ color:#007bff; text-decoration:none; }
+    .sub a:hover{ text-decoration:underline; }
+    .msg{
+      font-size:13px; margin-bottom:12px; padding:8px 10px; border-radius:6px;
+    }
+    .msg.error{ background:#ffe8e8; color:#b42318; border:1px solid #ffc9c9; }
+    .msg.ok{ background:#e7f9ef; color:#0f5132; border:1px solid #c7f0d9; }
+  </style>
+</head>
+<body>
+<div class="login-container">
+  <h2>Login</h2>
+
+  <!-- (선택) 메시지 표시: /login?error 또는 /login?ok -->
+  <div class="msg error" th:if="${param.error}" th:text="${param.error}">Invalid credentials.</div>
+  <div class="msg ok" th:if="${param.ok}" th:text="${param.ok}">Signed up successfully.</div>
+
+  <!-- 액션 경로만 컨트롤러와 맞추면 됩니다 -->
+  <form th:action="@{/login}" method="post">
+    <label for="id">User ID</label>
+    <input type="text" id="id" name="id" placeholder="Enter your ID" required>
+
+    <label for="pass">Password</label>
+    <input type="password" id="pass" name="pass" placeholder="Enter password" required>
+
+    <button type="submit">Log In</button>
+  </form>
+
+  <div class="sub">
+    Don't have an account?
+    <a th:href="@{/join}">Sign up</a>
+  </div>
+</div>
+</body>
+</html>
