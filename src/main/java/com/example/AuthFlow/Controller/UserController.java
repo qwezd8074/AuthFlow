@@ -7,15 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
-@Controller
+@RestController
 public class UserController {
 
     @Autowired
@@ -32,7 +29,7 @@ public class UserController {
                        @RequestParam String name,
                        @RequestParam String pass) {
         userService.signup(id, name, pass);
-        return "redirect:/"; // PRG 패턴
+        return "완료되었습니다."; // PRG 패턴
     }
 
     @GetMapping("login")
@@ -51,6 +48,6 @@ public class UserController {
             re.addFlashAttribute("msg", id + "님 어서오세요.");
         }
 
-            return "redirect:/";
+            return "완료되었습니다.";
         }
 }
