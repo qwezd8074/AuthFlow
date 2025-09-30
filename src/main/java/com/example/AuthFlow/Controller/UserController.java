@@ -25,7 +25,7 @@ public class UserController {
 
 
     @PostMapping("join")
-    public String save(@RequestParam String id,
+    public String save(@RequestParam Long id,
                        @RequestParam String name,
                        @RequestParam String pass) {
         userService.signup(id, name, pass);
@@ -38,16 +38,21 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public String submit(@RequestParam String id,
+    public String submit(@RequestParam String name,
                          @RequestParam String pass,
                          HttpSession session, RedirectAttributes re) {
-        User user = userService.findById(id);
-        if (user != null && user.getPass().equals(pass)) {
-            System.out.println(id + " Login");
-            session.setAttribute("user", user);
-            re.addFlashAttribute("msg", id + "님 어서오세요.");
+        Optional<User> optionalUser = userService.findByName(name);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (user.getPass().equals(pass)) {
+                System.out.println(name + " Login");
+                session.setAttribute("user", user);
+                re.addFlashAttribute("msg", name + "님 어서오세요.");
+                return "완료되었습니다.";
+            }
         }
 
-            return "완료되었습니다.";
-        }
+        return "실피했습니다.";
+    }
 }
