@@ -28,10 +28,10 @@ public class UserController {
 
     @PostMapping("join")
     @ResponseBody()
-    public ResponseEntity<String> save(@RequestParam Long id,
+    public ResponseEntity<String> save(
                        @RequestParam String name,
                        @RequestParam String pass) {
-        userService.signup(id, name, pass);
+        userService.signup(name, pass);
 
         return new ResponseEntity<>("회원가입에 성공했습니다.", HttpStatus.OK);
     }
