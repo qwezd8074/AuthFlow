@@ -17,28 +17,21 @@ public class UserService {
     }
 
     public Optional<User> findById(Long id){
-        Optional<User> u = userRepository.findById(id);
-        return u;
+        return userRepository.findById(id);
     }
 
     public Optional<User> findByName(String name) {
-        Optional<User> u = userRepository.findByName(name);
-        return u;
+        return userRepository.findByName(name);
     }
 
     @Transactional //회원가입
-    public void  signup(Long id, String name, String pass){
-        if(userRepository.existsById(id)) {
+    public void  signup(String name, String pass){
+        if(userRepository.existsByName(name)) {
             throw new IllegalArgumentException("이미 사용 중인 아이디 입니다.");
         }
         User u = new User();
-        u.setId(id);
         u.setName(name);
         u.setPass(pass);
         userRepository.save(u);
     }
-
-
-
-
 }
