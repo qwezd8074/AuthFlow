@@ -16,13 +16,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User findById(String id){
-        User u = userRepository.findById(id);
+    public Optional<User> findById(Long id){
+        Optional<User> u = userRepository.findById(id);
+        return u;
+    }
+
+    public Optional<User> findByName(String name) {
+        Optional<User> u = userRepository.findByName(name);
         return u;
     }
 
     @Transactional //회원가입
-    public void  signup(String id, String name, String pass){
+    public void  signup(Long id, String name, String pass){
         if(userRepository.existsById(id)) {
             throw new IllegalArgumentException("이미 사용 중인 아이디 입니다.");
         }
