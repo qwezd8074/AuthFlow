@@ -57,7 +57,6 @@ public class UserController {
                 return new ResponseEntity<>("로그인에 성공했습니다.", HttpStatus.OK);
             }
         }
-
         return new ResponseEntity<>("로그인에 실패했습니다.",HttpStatus.BAD_REQUEST);
     }
 }
