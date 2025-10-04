@@ -17,6 +17,10 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String nickname;
+    private String bio;
+    private String location;
+
     private boolean sex;
     private LocalDateTime birth;
 
@@ -24,8 +28,11 @@ public class UserInfo {
     private LocalDateTime updatedAt;
 
     @Builder
-    protected UserInfo(Long id, boolean sex, LocalDateTime birth) {
+    protected UserInfo(String nickname, String bio, String location, Long id, boolean sex, LocalDateTime birth) {
         this.id = id;
+        this.nickname = nickname;
+        this.location = location;
+        this.bio = bio;
         this.sex = sex;
         this.birth = birth;
         this.createdAt = LocalDateTime.now();
