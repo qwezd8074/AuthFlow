@@ -19,10 +19,10 @@ public class Message {
     private String id;
 
     // 메시지 보내는 유저
-    private Long from;
+    private Long sender;
 
     // 메시지 받는 유저
-    private Long to;
+    private Long receiver;
 
     // 컨텐츠
     private String content;
@@ -30,10 +30,10 @@ public class Message {
     private LocalDateTime createdAt;
 
     @Builder
-    private Message(Long from, Long to, String content){
+    private Message(Long sender, Long receiver, String content){
         this.id = this.generateId();
-        this.from = from;
-        this.to = to;
+        this.sender = sender;
+        this.receiver = receiver;
         this.content = content;
         this.createdAt = LocalDateTime.now();
     }
