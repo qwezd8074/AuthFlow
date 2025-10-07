@@ -34,4 +34,7 @@ public class UserService {
         u.setPass(pass);
         userRepository.save(u);
     }
+    public boolean existsName(String name) {
+        return userRepository.existsByName(name);
+    }
 }

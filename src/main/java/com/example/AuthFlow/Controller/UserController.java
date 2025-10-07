@@ -1,6 +1,7 @@
 package com.example.AuthFlow.Controller;
 
 import com.example.AuthFlow.Domain.User;
+import com.example.AuthFlow.Repository.UserRepository;
 import com.example.AuthFlow.Service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,27 @@ public class UserController {
         return "member/membership";
     }
 
+    @GetMapping("checkName")
+    public ResponseEntity<String> checkName(@RequestParam String name) {
+        boolean exists = userService.existsName(name);
+        if (exists) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("이미 사용 중인 아이디입니다.");
+        }
+        return ResponseEntity.ok("사용 가능한 아이디입니다.");
+    }
 
-    @PostMapping("join")
-    @ResponseBody()
-    public ResponseEntity<String> save(
-                       @RequestParam String name,
-                       @RequestParam String pass) {
-        userService.signup(name, pass);
-        return new ResponseEntity<>("회원가입에 성공했습니다.", HttpStatus.OK);
+    @PostMapping(value = "join", produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public ResponseEntity<String> save(@RequestParam String name,
+                                       @RequestParam String pass) {
+        try {
+            userService.signup(name, pass);
+            return ResponseEntity.ok("회원가입에 성공했습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
 
 
