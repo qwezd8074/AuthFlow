@@ -6,6 +6,7 @@ import com.example.AuthFlow.Service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +15,30 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Controller
 public class UserController {
+
+    private static final Pattern PW_PATTERN =
+            Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-={}:;\"'`~<>,.?/]).{8,20}$");
+
+    @PostMapping(value = "/validatePassword", produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> validatePassword(@RequestParam String pass,
+                                                   @RequestParam String confirm) {
+
+        if (!pass.equals(confirm)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("비밀번호가 일치하지 않습니다.");
+        }
+
+        if (!PW_PATTERN.matcher(pass).matches()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("8~20자, 영문/숫자/특수문자 포함으로 입력하세요.");
+        }
+
+        return ResponseEntity.ok("사용 가능한 비밀번호입니다.");
+    }
 
     @Autowired
     UserService userService;
