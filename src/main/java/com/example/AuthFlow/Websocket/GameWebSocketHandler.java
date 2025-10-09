@@ -1,6 +1,7 @@
-package com.example.AuthFlow.Handler;
+package com.example.AuthFlow.Websocket;
 
 import com.example.AuthFlow.DTO.Chat.ChatMessage;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.*;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class GameWebSocketHandler implements WebSocketHandler {
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     // session ID가 이미 할당되어 있는지 확인하기 위한 값
     private final Map<String, String> sessionRoomId = new ConcurrentHashMap<>();
@@ -26,13 +28,21 @@ public class GameWebSocketHandler implements WebSocketHandler {
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-        var sessionId = session.getId();
+        Map<String, String> payload = objectMapper.readValue(message.getPayload().toString(), Map.class);
 
-        ChatMessage msg = ChatMessage.builder()
-                .sender(sessionId)
-                .receiver("all")
-                .content(message.getPayload().toString())
-                .build();
+        log.info(payload.get("type").toString());
+
+        var type =  payload.get("type");
+
+        switch (type) {
+            case "join" -> {
+                var groupId = payload.get("groupId").toString();
+                this.join(groupId, session);
+            }
+            case "exit" -> {
+                this.exit(session);
+            }
+        }
     }
 
     @Override
@@ -56,6 +66,8 @@ public class GameWebSocketHandler implements WebSocketHandler {
                 .add(session);
 
         sessionRoomId.put(session.getId(), groupId);
+
+        displayCurrentSessionStatus();
     }
 
     private void exit(WebSocketSession session) {
@@ -72,5 +84,13 @@ public class GameWebSocketHandler implements WebSocketHandler {
                     return innerSession;
                 }
         );
+        sessionRoomId.remove(session.getId());
+
+        displayCurrentSessionStatus();
+    }
+
+    private void displayCurrentSessionStatus(){
+        log.info(sessionRoomId.values().toString());
+        log.info(roomSessions.values().toString());
     }
 }
